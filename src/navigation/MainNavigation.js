@@ -33,7 +33,7 @@ export default function MainNavigation() {
         screenOptions={{ headerShown: false, tabBarActiveTintColor: "#F7A026" }}
       >
         <Tab.Screen
-          name="Category List"
+          name="Category"
           component={MealNavigation}
           options={{
             tabBarIcon: ({ color, size }) => (
@@ -42,7 +42,7 @@ export default function MainNavigation() {
           }}
         />
         <Tab.Screen
-          name="Favorite Meal"
+          name="Favorite"
           component={FavoriteMealStack}
           options={{
             tabBarIcon: ({ color, size }) => (
