@@ -33,7 +33,7 @@ export default function MealListItem(props) {
           marginLeft: 10,
         })}
       >
-        Add to favorite
+        Favorite
       </Text>
     </Pressable>;
   };
