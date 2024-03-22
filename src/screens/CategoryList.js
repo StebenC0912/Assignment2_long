@@ -9,10 +9,11 @@ import {
 import ItemList from "../components/ItemList";
 import { CATEGORIES } from "../data/dummy-data";
 
-export default function CategoryList() {
+export default function CategoryList(props) {
   const data = CATEGORIES;
-  const handleCategoryClick = (category) => {
-    console.log("Category clicked: ", category);
+  const handleCategoryClick = (categoryId, category) => {
+    // navigate to the category screen
+    props.navigation.navigate("MealList", { categoryId: categoryId, category});
   };
   return (
     <ScrollView>
@@ -44,14 +45,13 @@ export default function CategoryList() {
           <FlatList
             style={StyleSheet.create({
               width: "100%",
-              borderRadius: 16,
             })}
             data={data}
             renderItem={({ item }) => (
               <ItemList
                 category={item.title}
                 color={item.color}
-                onPress={() => handleCategoryClick(item.title)}
+                onPress={() => handleCategoryClick(item.id, item.title)}
               />
             )}
             numColumns={2}
