@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,79 +6,118 @@ import {
   FlatList,
   Image,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import FavoriteMealItem from "../components/FavoriteMealItem";
 import { CATEGORIES } from "../data/dummy-data";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleFavorite } from "../store/actions/meal";
-function renderFavoriteMealList(FavoriteMealList, toggleFavoriteHandler) {
-  return (
-    <FlatList
-      style={{
-        width: "100%",
-        borderRadius: 16,
-      }}
-      data={FavoriteMealList}
-      renderItem={({ item }) => (
-        <FavoriteMealItem
-          image={item.imageUrl}
-          time={item.duration}
-          name={item.title}
-          complexity={item.complexity}
-          category={getCategoryById(item.categoryIds)}
-          onPress={() => toggleFavoriteHandler(item.id)}
-        />
-      )}
-      scrollEnabled={false}
-    />
-  );
-}
 
-// Function to get category by ID
-const getCategoryById = (categoryIds) => {
-  // return array of categories
-  // log the finding result
-  const mealCategories = [];
-  categoryIds.forEach((categoryId) => {
-    const category = CATEGORIES.find((cat) => cat.id === categoryId);
-    if (category) {
-      mealCategories.push(category.title);
-    }
-  });
-  return mealCategories;
-};
-function renderNoFavoriteMeals() {
-  return (
-    <View
-      style={StyleSheet.create({
-        marginTop: 60,
-      })}
-    >
-      <Image source={require("../assets/empty.png")} />
-      <Text
-        style={StyleSheet.create({
-          color: "#F7A026",
-          textAlign: "center",
-          fontWeight: "bold",
-          fontSize: 16,
-        })}
-      >
-        Your list is empty
-      </Text>
-    </View>
-  );
-}
-
-export default function FavoriteMeal() {
+export default function FavoriteMeal(props) {
   const FavoriteMEALS = useSelector((state) => state.meals.favoriteMeals);
   const FavoriteMealList = FavoriteMEALS;
   const dispatch = useDispatch();
   const toggleFavoriteHandler = (mealId) => {
     dispatch(toggleFavorite(mealId));
   };
+  const [screenHeight, setScreenHeight] = useState(
+    Dimensions.get("window").height
+  );
+  const [screenWidth, setScreenWidth] = useState(
+    Dimensions.get("window").width
+  );
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      setScreenHeight(Dimensions.get("window").height);
+      setScreenWidth(Dimensions.get("window").width);
+    };
+
+    Dimensions.addEventListener("change", updateDimensions);
+
+    return () => {
+      Dimensions.removeEventListener("change", updateDimensions);
+    };
+  }, []);
+  const navigateDetails = (id) => {
+    // navigate to the meal detail screen
+    console.log("Meal clicked", id);
+    props.navigation.navigate("MealDetail", {
+      mealId: id,
+      category: null,
+      categoryId: null,
+    });
+  };
+
+  const renderFavoriteMealList = () => {
+    return (
+      <FlatList
+        style={{
+          width: "100%",
+          borderRadius: 16,
+        }}
+        data={FavoriteMealList}
+        renderItem={({ item }) => (
+          <FavoriteMealItem
+            image={item.imageUrl}
+            time={item.duration}
+            name={item.title}
+            complexity={item.complexity}
+            category={getCategoryById(item.categoryIds)}
+            onPress={() => toggleFavoriteHandler(item.id)}
+            onPressItem={() => navigateDetails(item.id)}
+          />
+        )}
+        scrollEnabled={false}
+      />
+    );
+  };
+
+  // Function to get category by ID
+  const getCategoryById = (categoryIds) => {
+    // return array of categories
+    // log the finding result
+    const mealCategories = [];
+    categoryIds.forEach((categoryId) => {
+      const category = CATEGORIES.find((cat) => cat.id === categoryId);
+      if (category) {
+        mealCategories.push(category.title);
+      }
+    });
+    return mealCategories;
+  };
+
+  const renderNoFavoriteMeals = () => {
+    return (
+      <View
+        style={StyleSheet.create({
+          marginTop: 60,
+        })}
+      >
+        <Image source={require("../assets/empty.png")} />
+        <Text
+          style={StyleSheet.create({
+            color: "#F7A026",
+            textAlign: "center",
+            fontWeight: "bold",
+            fontSize: 16,
+          })}
+        >
+          Your list is empty
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
-      <Image source={require("../assets/ok.png")} style={styles.headerImage} />
+      <Image
+        source={require("../assets/ok.png")}
+        style={[
+          styles.headerImage,
+          { height: screenWidth > screenHeight ? 200 : 357 },
+        ]}
+      />
       <View
         style={{
           flex: 1,
@@ -103,7 +142,7 @@ export default function FavoriteMeal() {
 
         {FavoriteMealList.length === 0
           ? renderNoFavoriteMeals()
-          : renderFavoriteMealList(FavoriteMealList, toggleFavoriteHandler)}
+          : renderFavoriteMealList()}
       </View>
     </ScrollView>
   );

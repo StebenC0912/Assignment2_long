@@ -41,11 +41,19 @@ export default function MealDetail(props) {
           }}
           style={styles.headerImage}
         >
-          <Pressable style={{ marginLeft: 20, marginTop: 50 }} onPress={
-            () => {
-              props.navigation.navigate("MealList", { category: category , categoryId: categoryId});
-            }
-          }>
+          <Pressable
+            style={{ marginLeft: 20, marginTop: 50 }}
+            onPress={() => {
+              if (category == null && categoryId == null) {
+                props.navigation.navigate("FavoriteMeal");
+              } else {
+                props.navigation.navigate("MealList", {
+                  category: category,
+                  categoryId: categoryId,
+                });
+              }
+            }}
+          >
             <Ionicons name="arrow-back-circle" size={36} color="white" />
           </Pressable>
         </ImageBackground>

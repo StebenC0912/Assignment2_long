@@ -9,41 +9,48 @@ import MealList from "../screens/MealList";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function BottomTab() {
+function MealNavigation() {
   return (
-    <Tab.Navigator
-      screenOptions={{ headerShown: false, tabBarActiveTintColor: "#F7A026" }}
-    >
-      <Tab.Screen
-        name="CategoryList"
-        component={CategoryList}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="FavoriteMeal"
-        component={FavoriteMeal}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart-outline" color={color} size={size} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="CategoryList" component={CategoryList} />
+      <Stack.Screen name="MealList" component={MealList} />
+      <Stack.Screen name="MealDetail" component={MealDetail} />
+    </Stack.Navigator>
   );
 }
-
+function FavoriteMealStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="FavoriteMeal" component={FavoriteMeal} />
+      <Stack.Screen name="MealDetail" component={MealDetail} />
+    </Stack.Navigator>
+  );
+}
 export default function MainNavigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="BottomTab" component={BottomTab} />
-        <Stack.Screen name="MealList" component={MealList} />
-        <Stack.Screen name="MealDetail" component={MealDetail} />
-      </Stack.Navigator>
+      <Tab.Navigator
+        screenOptions={{ headerShown: false, tabBarActiveTintColor: "#F7A026" }}
+      >
+        <Tab.Screen
+          name="Category List"
+          component={MealNavigation}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="home-outline" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Favorite Meal"
+          component={FavoriteMealStack}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="heart-outline" color={color} size={size} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }

@@ -2,7 +2,7 @@ import { MEALS } from "../../data/dummy-data";
 import { TOGGLE_FAVORITE } from "../actions/meal";
 const initialState = {
   meals: MEALS,
-  favoriteMeals: [MEALS[0]],
+  favoriteMeals: [],
 };
 
 const mealReducer = (state = initialState, action) => {

@@ -5,22 +5,46 @@ import {
   FlatList,
   Image,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import ItemList from "../components/ItemList";
 import { CATEGORIES } from "../data/dummy-data";
+import React, { useState, useEffect } from "react";
 
 export default function CategoryList(props) {
   const data = CATEGORIES;
   const handleCategoryClick = (categoryId, category) => {
     // navigate to the category screen
-    props.navigation.navigate("MealList", { categoryId: categoryId, category});
+    props.navigation.navigate("MealList", { categoryId: categoryId, category });
   };
+  const [screenHeight, setScreenHeight] = useState(
+    Dimensions.get("window").height
+  );
+  const [screenWidth, setScreenWidth] = useState(
+    Dimensions.get("window").width
+  );
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      setScreenHeight(Dimensions.get("window").height);
+      setScreenWidth(Dimensions.get("window").width);
+    };
+
+    Dimensions.addEventListener("change", updateDimensions);
+
+    return () => {
+      Dimensions.removeEventListener("change", updateDimensions);
+    };
+  }, []);
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View style={[styles.container, { minHeight: screenHeight }]}>
         <Image
           source={require("../assets/Header.png")}
-          style={styles.headerImage}
+          style={[
+            styles.headerImage,
+            { height: screenWidth > screenHeight ? 200 : 357 },
+          ]}
         ></Image>
         <View
           style={StyleSheet.create({

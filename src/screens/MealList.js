@@ -8,8 +8,9 @@ import {
   ScrollView,
   ImageBackground,
   Pressable,
+  Dimensions,
 } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import MealListItem from "../components/MealListItem";
@@ -19,7 +20,25 @@ import { CATEGORIES } from "../data/dummy-data";
 import { toggleFavorite } from "../store/actions/meal";
 export default function MealList(props) {
   const { categoryId, category } = props.route.params;
+  const [screenHeight, setScreenHeight] = useState(
+    Dimensions.get("window").height
+  );
+  const [screenWidth, setScreenWidth] = useState(
+    Dimensions.get("window").width
+  );
 
+  useEffect(() => {
+    const updateDimensions = () => {
+      setScreenHeight(Dimensions.get("window").height);
+      setScreenWidth(Dimensions.get("window").width);
+    };
+
+    Dimensions.addEventListener("change", updateDimensions);
+
+    return () => {
+      Dimensions.removeEventListener("change", updateDimensions);
+    };
+  }, []);
   // Function to handle meal click
   const handleMealClick = (id) => {
     // navigate to the meal detail screen
@@ -119,13 +138,16 @@ export default function MealList(props) {
 
   const toggleFavoriteHandler = (id) => {
     dispatch(toggleFavorite(id));
-  }
+  };
   return (
     <ScrollView style={{ backgroundColor: "white" }}>
       <View>
         <ImageBackground
           source={require("../assets/Bread.png")}
-          style={styles.headerImage}
+          style={[
+            styles.headerImage,
+            { height: screenWidth > screenHeight ? 200 : 357 },
+          ]}
         >
           <Pressable
             style={{ marginLeft: 20, marginTop: 50 }}

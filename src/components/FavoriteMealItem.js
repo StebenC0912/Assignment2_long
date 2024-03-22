@@ -9,7 +9,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 export default function FavoriteMealItem(props) {
-  const { image, time, name, complexity, category , onPress} = props;
+  const { image, time, name, complexity, category , onPress, onPressItem} = props;
  
   return (
     <View
@@ -28,6 +28,7 @@ export default function FavoriteMealItem(props) {
           flex: 1,
           width: "100%",
         })}
+        onPress={onPressItem}
       >
         <ImageBackground
           source={{ uri: image }}
