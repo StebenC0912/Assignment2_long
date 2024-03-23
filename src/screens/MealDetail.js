@@ -6,7 +6,9 @@ import {
   ScrollView,
   Pressable,
   ImageBackground,
+  Dimensions,
 } from "react-native";
+import React, { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Tag from "../components/Tag";
 import Instructions from "../components/Instruction";
@@ -27,7 +29,24 @@ export default function MealDetail(props) {
   if (meal.isLactoseFree) {
     attribute.push("Lactose Free");
   }
+  const [screenHeight, setScreenHeight] = useState(
+    Dimensions.get("window").height
+  );
+  const [screenWidth, setScreenWidth] = useState(
+    Dimensions.get("window").width
+  );
 
+  useEffect(() => {
+    const updateDimensions = () => {
+      setScreenHeight(Dimensions.get("window").height);
+      setScreenWidth(Dimensions.get("window").width);
+    };
+
+    Dimensions.addEventListener("change", updateDimensions);
+    return () => {
+      
+    };
+  }, []);
   return (
     <ScrollView
       style={StyleSheet.create({
@@ -39,7 +58,10 @@ export default function MealDetail(props) {
           source={{
             uri: meal.imageUrl,
           }}
-          style={styles.headerImage}
+          style={[
+            styles.headerImage,
+            { height: screenWidth > screenHeight ? 250 : 357 },
+          ]}
         >
           <Pressable
             style={{ marginLeft: 20, marginTop: 50 }}
