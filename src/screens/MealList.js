@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Pressable,
   Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import { useEffect, useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -20,23 +21,20 @@ import { CATEGORIES } from "../data/dummy-data";
 import { toggleFavorite } from "../store/actions/meal";
 export default function MealList(props) {
   const { categoryId, category } = props.route.params;
-  const [screenHeight, setScreenHeight] = useState(
-    Dimensions.get("window").height
-  );
-  const [screenWidth, setScreenWidth] = useState(
-    Dimensions.get("window").width
-  );
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+
+  const [initialScreenWidth, setInitialScreenWidth] = useState(screenWidth);
+  const [initialScreenHeight, setInitialScreenHeight] = useState(screenHeight);
 
   useEffect(() => {
     const updateDimensions = () => {
-      setScreenHeight(Dimensions.get("window").height);
-      setScreenWidth(Dimensions.get("window").width);
+      setInitialScreenHeight(Dimensions.get("window").height);
+      setInitialScreenWidth(Dimensions.get("window").width);
     };
 
     Dimensions.addEventListener("change", updateDimensions);
 
     return () => {
-      Dimensions.removeEventListener("change", updateDimensions);
     };
   }, []);
   // Function to handle meal click
@@ -151,7 +149,7 @@ export default function MealList(props) {
         >
           <Pressable
             style={{ marginLeft: 20, marginTop: 50 }}
-            onPress={() => props.navigation.navigate("CategoryList")}
+            onPress={() => props.navigation.goBack()}
           >
             <Ionicons name="arrow-back-circle" size={30} color="white" />
           </Pressable>

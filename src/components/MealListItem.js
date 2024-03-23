@@ -134,11 +134,11 @@ export default function MealListItem(props) {
 
               <Text style={styles.textDetail}>{time} mins</Text>
               <Text style={styles.textDetail}>{complexity}</Text>
-              {category.map((category, index) => (
-                <Text key={index} style={styles.textDetail}>
-                  {category}
-                </Text>
-              ))}
+              <Text style={styles.textDetail}>
+                {category.join(", ").length > 20
+                  ? `${category.join(", ").substring(0, 20)}...`
+                  : category.join(", ")}
+              </Text>
             </View>
             {isFavorite ? renderRemove() : renderButtonFavorite()}
           </LinearGradient>

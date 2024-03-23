@@ -31,9 +31,8 @@ export default function CategoryList(props) {
     };
 
     Dimensions.addEventListener("change", updateDimensions);
-
     return () => {
-      Dimensions.removeEventListener("change", updateDimensions);
+
     };
   }, []);
   return (
