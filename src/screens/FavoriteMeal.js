@@ -34,9 +34,8 @@ export default function FavoriteMeal(props) {
     };
 
     Dimensions.addEventListener("change", updateDimensions);
-
     return () => {
-      Dimensions.removeEventListener("change", updateDimensions);
+      
     };
   }, []);
   const navigateDetails = (id) => {
